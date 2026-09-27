@@ -1,0 +1,148 @@
+export type PostSection = { heading: string; paragraphs: string[] }
+
+export type Post = {
+  slug: string
+  title: string
+  category: string
+  date: string // ISO date
+  readingTime: string
+  description: string
+  sections: PostSection[]
+}
+
+export const posts: Post[] = [
+  {
+    slug: "claude-skills-every-developer-should-know",
+    title: "10 Claude Skills Every Developer Should Know",
+    category: "AI Engineering",
+    date: "2026-09-18",
+    readingTime: "8 min read",
+    description:
+      "Packaged instructions turn a general assistant into a teammate who knows your repo's rules. Here's how I think about which ones are worth writing.",
+    sections: [
+      {
+        heading: "Skills are onboarding docs for your assistant",
+        paragraphs: [
+          "A skill is a folder of instructions an AI coding assistant loads when a task matches it. The useful mental model is onboarding: what would you tell a new engineer before they touched this part of the codebase?",
+          "The best skills are narrow. “How we write database migrations” beats “backend best practices”, because the assistant can tell exactly when it applies.",
+        ],
+      },
+      {
+        heading: "Start with the things you repeat in review",
+        paragraphs: [
+          "Every comment you leave on pull requests more than twice is a candidate: naming conventions, error-handling patterns, how tests are structured, which internal helpers to reuse.",
+          "Deploy steps, release checklists, and incident runbooks are the next tier — procedures where skipping a step is expensive.",
+        ],
+      },
+      {
+        heading: "Keep them honest",
+        paragraphs: [
+          "Skills rot like any documentation. Keep them next to the code they describe, review them in the same pull requests, and delete the ones nobody triggers.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "ai-agent-architecture",
+    title: "How to Think About AI Agent Architecture",
+    category: "AI Systems",
+    date: "2026-09-04",
+    readingTime: "10 min read",
+    description:
+      "An agent is a loop, a set of tools, and a budget. Most of the engineering is in the tools and the boundaries, not the prompt.",
+    sections: [
+      {
+        heading: "The loop is the easy part",
+        paragraphs: [
+          "Strip away the vocabulary and an agent is a loop: the model reads the state, picks a tool, the tool runs, the result goes back into the context. That loop is a few dozen lines.",
+          "What makes an agent reliable is everything around it — what tools exist, what they're allowed to do, and when the loop stops.",
+        ],
+      },
+      {
+        heading: "Design tools like public APIs",
+        paragraphs: [
+          "Tools should have small, typed inputs and outputs that are useful to read. A tool that returns 40KB of raw JSON wastes context and invites mistakes.",
+          "Make destructive operations explicit and separate. A read tool and a write tool are easier to reason about than one tool with a mode flag.",
+        ],
+      },
+      {
+        heading: "Budgets and exits",
+        paragraphs: [
+          "Give every run a step limit, a cost limit, and a clear definition of done. Log every tool call so a failed run can be replayed and understood.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "rag-is-more-than-vector-search",
+    title: "RAG Is More Than Vector Search",
+    category: "AI Engineering",
+    date: "2026-08-21",
+    readingTime: "7 min read",
+    description:
+      "When a retrieval-augmented system gives a bad answer, look at what it retrieved before touching the prompt or the model.",
+    sections: [
+      {
+        heading: "Debug the context first",
+        paragraphs: [
+          "Most wrong answers are right answers to the wrong context. Log the retrieved passages alongside every response and review them before blaming the model.",
+        ],
+      },
+      {
+        heading: "Chunking is a product decision",
+        paragraphs: [
+          "Chunk by meaning, not by character count. For articles, that usually means paragraphs grouped under their headings, with the title and date carried as metadata.",
+          "Metadata filters — date ranges, sections, authors — often improve results more than a better embedding model.",
+        ],
+      },
+      {
+        heading: "Let it say no",
+        paragraphs: [
+          "If nothing relevant was retrieved, the correct answer is “I couldn't find that”. Build that path explicitly.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "real-time-apps-with-durable-objects",
+    title: "Building Real-Time Applications with Cloudflare Durable Objects",
+    category: "Cloud Engineering",
+    date: "2026-08-02",
+    readingTime: "9 min read",
+    description:
+      "Stateless edge functions are fast but forgetful. Durable Objects give you one place where state lives — which is exactly what real-time apps need.",
+    sections: [
+      {
+        heading: "One object, one timeline",
+        paragraphs: [
+          "A Durable Object is a single-threaded actor with its own storage. Every request for the same ID reaches the same instance, so its state changes happen one at a time.",
+          "That makes it a natural fit for a chat room, a game, a document, or a live match: anything where many clients need to agree on one sequence of events.",
+        ],
+      },
+      {
+        heading: "WebSockets without the servers",
+        paragraphs: [
+          "With the hibernation API, a Durable Object can hold thousands of idle WebSocket connections and only wake when a message arrives.",
+        ],
+      },
+      {
+        heading: "Know when not to use them",
+        paragraphs: [
+          "If data is read-heavy and can be a little stale, KV or a cache is simpler. Reach for Durable Objects when correctness depends on ordering.",
+        ],
+      },
+    ],
+  },
+]
+
+export function getPost(slug: string | undefined) {
+  return posts.find((post) => post.slug === slug)
+}
+
+export function formatPostDate(iso: string) {
+  return new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  })
+}

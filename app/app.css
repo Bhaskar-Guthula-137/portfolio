@@ -1,0 +1,135 @@
+@import "tailwindcss" source(".");
+
+@theme {
+  --color-ink: #0a0a09;
+  --color-char: #141412;
+  --color-graphite: #22221f;
+  --color-smoke: #3a3a35;
+  --color-paper: #ece9e1;
+  --color-warm: #f6f4ee;
+  --color-mute: #8b887f;
+  --color-accent: #c8f23d;
+  --color-accent-ink: #3b4d00;
+
+  --font-display: "Inter Tight Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Tight Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, monospace;
+
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-flow: flow 1.2s linear infinite;
+  --animate-pulse-dot: pulse-dot 2.4s ease-out infinite;
+  --animate-marquee: marquee 40s linear infinite;
+
+  @keyframes flow {
+    to {
+      stroke-dashoffset: -12;
+    }
+  }
+  @keyframes pulse-dot {
+    0% {
+      box-shadow: 0 0 0 0 rgb(200 242 61 / 0.6);
+    }
+    70%,
+    100% {
+      box-shadow: 0 0 0 8px rgb(200 242 61 / 0);
+    }
+  }
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@layer base {
+  html {
+    background: var(--color-ink);
+    color: var(--color-warm);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--color-ink);
+    font-family: var(--font-sans);
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+
+  /* The custom cursor replaces the pointer on fine-pointer devices only. */
+  html.has-cursor,
+  html.has-cursor a,
+  html.has-cursor button {
+    cursor: none;
+  }
+}
+
+@layer components {
+  .gutter {
+    padding-inline: clamp(1rem, 3.5vw, 3rem);
+  }
+
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1.4;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* Oversized display type: the primary visual material of the site. */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 0.82;
+    letter-spacing: -0.065em;
+    text-transform: uppercase;
+  }
+
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.5s var(--ease-expo);
+  }
+  .link-underline:hover,
+  .link-underline:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  .hairline-grid {
+    background-image:
+      linear-gradient(to right, rgb(246 244 238 / 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(246 244 238 / 0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

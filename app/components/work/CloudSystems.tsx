@@ -6,9 +6,9 @@ import { ProjectMeta, ProjectTitle, Scene } from "./shared"
 import { CloudMap } from "./visuals/CloudMap"
 
 /** 06 — the infrastructure underneath: a living architecture that connects as you scroll. */
-export function CloudSystems({ project }: { project: Project }) {
+export function CloudSystems({ project, progress }: { project: Project; progress?: MotionValue<number> }) {
   return (
-    <Scene height="260svh" className="bg-ink text-warm" label={project.title}>
+    <Scene progress={progress} height="260svh" className="bg-ink text-warm" label={project.title}>
       {(p) => <Stage p={p} project={project} />}
     </Scene>
   )

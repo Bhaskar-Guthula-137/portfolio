@@ -1,14 +1,15 @@
 import { motion } from "framer-motion"
 
 import { SystemLine } from "~/components/ui/SystemLine"
-import { navLinks, siteConfig } from "~/data/site-config"
+import { navLinks } from "~/data/site-config"
 import { EASE } from "~/lib/motion"
+import { infoData } from "~/data/info"
 
 const LINKS = [
   ...navLinks.filter((l) => l.id !== "contact").map((l) => ({ label: l.label, href: l.href })),
-  { label: "GitHub", href: siteConfig.links.github },
-  { label: "LinkedIn", href: siteConfig.links.linkedin },
-  { label: "Email", href: `mailto:${siteConfig.email}` },
+  { label: "GitHub", href: infoData.socials.github },
+  { label: "LinkedIn", href: infoData.socials.linkedin },
+  { label: "Email", href: `mailto:${infoData.email}` },
 ]
 
 export function Footer() {
@@ -31,18 +32,18 @@ export function Footer() {
           ))}
         </nav>
         <p className="label text-warm/60">
-          {siteConfig.title} · {siteConfig.location.city} · {siteConfig.location.country}
+          {infoData.role} · {infoData.location.city} · {infoData.location.country}
         </p>
       </div>
 
       <motion.p
         className="display mt-16 px-[1.5vw] text-[20vw] leading-[0.78] tracking-[-0.075em]"
-        aria-label={siteConfig.name}
+        aria-label={infoData.name}
         initial="hidden"
         whileInView="shown"
         viewport={{ once: true, amount: 0.3 }}
       >
-        {[siteConfig.firstName, siteConfig.lastName].map((word, w) => (
+        {[infoData.firstName, infoData.lastName].map((word, w) => (
           <span key={word} aria-hidden className="block overflow-hidden">
             <motion.span
               className={
@@ -59,7 +60,7 @@ export function Footer() {
 
       <div className="gutter label mt-8 flex flex-wrap justify-between gap-4 text-warm/40">
         <span>
-          © {new Date().getFullYear()} {siteConfig.name}
+          © {new Date().getFullYear()} {infoData.name}
         </span>
         <span className="flex items-center gap-2">
           <span className="size-1.5 rounded-full bg-accent" /> Built with curiosity.

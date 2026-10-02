@@ -8,8 +8,8 @@ import { siteConfig } from "./app/data/site-config"
 
 const paths = [
   "/",
-  ...projects.map((project) => `/work/${project.slug}`),
-  ...posts.map((post) => `/writing/${post.slug}`),
+  ...projects.map((project) => `/projects/${project.slug}`),
+  ...posts.map((post) => `/blogs/${post.slug}`),
 ]
 
 const config: Config = {

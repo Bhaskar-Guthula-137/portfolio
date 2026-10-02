@@ -203,9 +203,9 @@ async def move(story: Story, to: str, actor: User) -> Story:
     },
   },
   {
-    slug: "rush-cut",
+    slug: "video-editing-agent",
     index: "04",
-    title: "Rush Cut",
+    title: "Video Editing Agent",
     category: "AI Video Automation",
     tag: "AI PIPELINE",
     tech: ["FastAPI", "Claude", "ElevenLabs", "FFmpeg", "Celery", "Redis", "Docker"],
@@ -214,7 +214,7 @@ async def move(story: Story, to: str, actor: User) -> Story:
     highlight: "From raw footage to a cut, automatically",
     visual: "pipeline",
     overview:
-      "Upload raw footage and get back an edited video. Rush Cut transcribes the footage, asks a language model to plan the edit, and renders the result with FFmpeg — all as background jobs.",
+      "Upload raw footage and get back an edited video. The agent transcribes the footage, asks a language model to plan the edit, and renders the result with FFmpeg — all as background jobs.",
     problem:
       "Turning long raw recordings into short, watchable edits is repetitive and slow. Most of the decisions — trim silences, keep the strongest takes, add voice-over — follow patterns a model can plan.",
     approach:

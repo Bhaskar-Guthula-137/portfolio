@@ -30,8 +30,7 @@ All content is local data in `app/data/`:
 | `projects.ts` | Selected work and case-study content |
 | `experience.ts` | Role and the capability timeline |
 | `articles.ts` | Articles for "Thinking in Public" |
-| `technologies.ts` | "The Tools" words and the "How it works" nodes/edges |
-| `experiments.ts` | Lab experiments and "Currently exploring" rows |
+| `technologies.ts` | "Technologies" words and their related projects |
 
 Motion respects `prefers-reduced-motion`: pinned scroll scenes render their final state, and the custom cursor and loops turn off.
 

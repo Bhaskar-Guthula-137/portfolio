@@ -5,9 +5,9 @@ import { ProjectMeta, ProjectTitle, Scene, StageList, useStage } from "./shared"
 import { CMS_STAGES, CmsBoard } from "./visuals/CmsBoard"
 
 /** 03 — REPORTER → CONTENT → REVIEW → AI → SCHEDULE → PUBLISH. */
-export function ShortNewsCms({ project }: { project: Project }) {
+export function ShortNewsCms({ project, progress }: { project: Project; progress?: MotionValue<number> }) {
   return (
-    <Scene height="400svh" className="bg-ink text-warm" label={project.title}>
+    <Scene progress={progress} height="400svh" className="bg-ink text-warm" label={project.title}>
       {(p) => <Stage p={p} project={project} />}
     </Scene>
   )

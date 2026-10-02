@@ -1,11 +1,11 @@
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion, useTransform } from "framer-motion"
 import { useEffect, useRef, useState } from "react"
 import { Link } from "react-router"
 
 import { SplitText } from "~/components/ui/SplitText"
 import { SystemLine } from "~/components/ui/SystemLine"
 import { tools } from "~/data/technologies"
-import { cx, EASE } from "~/lib/motion"
+import { cx, EASE, useScenes, useSectionProgress } from "~/lib/motion"
 
 // Editorial arrangement: which words share a row, and how each row is set.
 const ROWS: Array<{ items: number[]; className: string }> = [
@@ -13,14 +13,21 @@ const ROWS: Array<{ items: number[]; className: string }> = [
   { items: [2, 3], className: "justify-end" },
   { items: [4, 5], className: "justify-start lg:pl-[8vw]" },
   { items: [6, 7], className: "justify-between" },
+  { items: [8], className: "justify-end lg:pr-[6vw]" },
 ]
 
 /**
- * THE TOOLS — technologies set as type. Hovering (or tapping) a word widens
+ * TECHNOLOGIES — technologies set as type. Hovering (or tapping) a word widens
  * it, pushes its neighbours aside, and draws a line to the project it built.
  */
 export function Tools() {
   const [active, setActive] = useState<number | null>(null)
+  // The highlighter follows the scroll: it starts as the heading enters the
+  // lower part of the screen and is fully drawn by the time it reaches the top third.
+  const scenes = useScenes()
+  const titleRef = useRef<HTMLHeadingElement>(null)
+  const titleProgress = useSectionProgress(titleRef, ["start 90%", "start 35%"])
+  const highlight = useTransform(titleProgress, (v) => (scenes ? Math.min(1, Math.max(0, v)) : 1))
   const wrap = useRef<HTMLDivElement>(null)
   const words = useRef<Array<HTMLElement | null>>([])
   const target = useRef<HTMLAnchorElement>(null)
@@ -37,7 +44,7 @@ export function Tools() {
       const b = target.current?.getBoundingClientRect()
       if (box && a && b) {
         const x1 = a.left + a.width / 2 - box.left
-        const y1 = a.bottom - box.top
+        const y1 = a.bottom - box.top + 26
         const x2 = b.left - box.left - 8
         const y2 = b.top + b.height / 2 - box.top
         setPath(`M ${x1} ${y1} C ${x1} ${y2}, ${x1} ${y2}, ${x2} ${y2}`)
@@ -53,13 +60,21 @@ export function Tools() {
   return (
     <section aria-labelledby="tools-title" className="relative bg-paper pt-24 pb-32 text-ink lg:pt-32 lg:pb-44">
       <div className="gutter flex items-center gap-4">
-        <span className="label text-ink/50">02 / The Tools</span>
+        <span className="label text-ink/50">02 / Technologies</span>
         <SystemLine nodes={2} tone="dark" className="flex-1" active={[1]} />
       </div>
       <div className="gutter mt-10 flex flex-wrap items-end justify-between gap-6">
-        <SplitText as="h2" text="The Tools" className="display text-[14vw] lg:text-[10vw]" id="tools-title" />
+        <h2 ref={titleRef} id="tools-title" className="display relative inline-block text-[11vw] lg:text-[10vw]">
+          {/* A lime highlighter drawn across the heading by scrolling — it reads apart from the words below */}
+          <motion.span
+            aria-hidden
+            className="absolute inset-x-[-0.06em] top-[0.14em] bottom-[0.02em] origin-left -rotate-1 rounded-[0.08em] bg-accent"
+            style={{ scaleX: highlight }}
+          />
+          <SplitText text="Technologies" className="relative" />
+        </h2>
         <p className="label max-w-[16rem] text-ink/60">
-          No percentages. Hover a tool to see what it does and what it built.
+          No percentages. Hover a technology to see what it does and what it built.
         </p>
       </div>
 
@@ -149,7 +164,7 @@ export function Tools() {
         <div className="mt-16 flex justify-end lg:mt-10">
           <Link
             ref={target}
-            to={tool ? `/work/${tool.project.slug}` : "/#work"}
+            to={tool ? `/projects/${tool.project.slug}` : "/#projects"}
             data-cursor="view"
             className={cx(
               "flex min-w-[15rem] items-center gap-4 border-l-2 py-2 pl-4 transition-colors duration-500",
@@ -166,7 +181,7 @@ export function Tools() {
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
               >
-                {tool ? `${tool.project.title} ↗` : "Pick a tool"}
+                {tool ? `${tool.project.title} ↗` : "Pick a technology"}
               </motion.span>
             </AnimatePresence>
           </Link>

@@ -7,6 +7,7 @@ import { LOGO_FONT_PX, navLogoOpacity } from "~/lib/brand"
 import { BOOT, EASE, useScenes, useSectionProgress } from "~/lib/motion"
 import { DeveloperScene, SceneNotes } from "./DeveloperScene"
 import { IntroLayer, IntroStatic, useIntroColors } from "./Intro"
+import { infoData } from "~/data/info"
 
 // The entrance plays in full once per page load; returning later replays it quickly.
 let booted = false
@@ -77,6 +78,8 @@ export function Hero() {
   const cueOpacity = useTransform(p, [0, 0.04], [1, 0])
   const introP = useTransform(p, [0.28, 1], [0, 1])
   const introOpacity = useTransform(p, [0.27, 0.33], [0, 1])
+  // The intro sits on top of the hero; it must not catch clicks until it shows.
+  const introPointer = useTransform(introOpacity, (v) => (v > 0.5 ? "auto" : "none"))
   const { bg, fg } = useIntroColors(introP)
 
   if (!scenes)
@@ -121,12 +124,12 @@ export function Hero() {
           style={{ opacity: cueOpacity }}
         >
           <Fade delay={t(BOOT.meta)}>
-            {siteConfig.location.city} · {siteConfig.location.country}
+            {infoData.location.city} · {infoData.location.country}
           </Fade>
           <Fade delay={t(BOOT.meta) + 0.05}>Scroll ↓</Fade>
         </motion.div>
 
-        <motion.div className="absolute inset-0" style={{ opacity: introOpacity }}>
+        <motion.div className="absolute inset-0" style={{ opacity: introOpacity, pointerEvents: introPointer }}>
           <IntroLayer p={introP} />
         </motion.div>
       </motion.div>
@@ -166,22 +169,22 @@ function HeroContent({
       <motion.h1
         ref={nameRef}
         id="hero-title"
-        aria-label={siteConfig.name}
+        aria-label={infoData.name}
         className="display text-[26px] leading-[0.84] lg:text-[2.2vw]"
         style={m && { x: m.nameX, y: m.nameY, scale: m.nameScale, opacity: m.nameOpacity }}
       >
-        <Word text={siteConfig.firstName} delay={t(BOOT.first)} className="-translate-x-[0.45em]" />
-        <Word text={siteConfig.lastName} delay={t(BOOT.first) + 0.08} className="translate-x-[0.45em]" />
+        <Word text={infoData.firstName} delay={t(BOOT.first)} className="-translate-x-[0.45em]" />
+        <Word text={infoData.lastName} delay={t(BOOT.first) + 0.08} className="translate-x-[0.45em]" />
       </motion.h1>
 
       {/* The profession, in the regular typeface */}
       <motion.div style={m && { y: m.roleY, opacity: m.roleOpacity }}>
         <p
           className="mt-6 text-[10vw] leading-none font-medium tracking-[-0.035em] text-warm lg:mt-7 lg:text-[4.4vw]"
-          aria-label={siteConfig.title}
+          aria-label={infoData.role}
         >
           <span aria-hidden>
-            {siteConfig.title.split(" ").map((word, i, all) => (
+            {infoData.role.split(" ").map((word, i, all) => (
               <span key={word}>
                 <Word text={word} delay={t(BOOT.last) + i * 0.14} inline />
                 {i < all.length - 1 && " "}
@@ -210,7 +213,7 @@ function HeroContent({
 
       <motion.div style={m && { y: m.textY, opacity: m.textOpacity }}>
         <Fade delay={t(BOOT.statement)}>
-          <p className="mx-auto mt-10 max-w-[22rem] text-lg leading-snug text-warm/65 lg:max-w-[30rem] lg:text-xl">
+          <p className="mx-auto mt-16 max-w-[22rem] text-lg leading-snug text-warm/65 lg:max-w-[30rem] lg:text-xl">
             {siteConfig.hero.statement}
           </p>
         </Fade>
@@ -219,12 +222,12 @@ function HeroContent({
           className="label mt-9 flex flex-col items-center gap-5 sm:flex-row sm:justify-center sm:gap-8"
         >
           <TextLink to="/#contact" arrow="↗" primary>
-            Start a project
+            Let's Connect
           </TextLink>
           <span aria-hidden className="hidden text-warm/25 sm:inline">
             ·
           </span>
-          <TextLink to="/#work" arrow="↓">
+          <TextLink to="/#projects" arrow="↓">
             View work
           </TextLink>
         </Fade>

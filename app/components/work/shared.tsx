@@ -6,8 +6,9 @@ import type { Project } from "~/data/projects"
 import { cx, EASE, useScenes, useSectionProgress } from "~/lib/motion"
 
 /**
- * A pinned scroll scene. Children receive the scene's 0 → 1 progress. With
- * reduced motion the scene is not pinned and progress rests at 1.
+ * A project scene. Children receive a 0 → 1 progress. Given `progress`, the
+ * scene is a panel inside the horizontal projects track; otherwise it pins
+ * itself with its own scroll height. With reduced motion progress rests at 1.
  */
 export function Scene({
   height,
@@ -16,8 +17,10 @@ export function Scene({
   children,
   id,
   label,
+  progress,
   staticClassName = "relative h-svh min-h-[720px]",
 }: {
+  progress?: MotionValue<number>
   staticClassName?: string
   height: string
   className?: string
@@ -30,6 +33,17 @@ export function Scene({
   const ref = useRef<HTMLElement>(null)
   const scrollYProgress = useSectionProgress(ref, ["start start", "end end"])
   const done = useTransform(scrollYProgress, () => 1)
+
+  if (progress)
+    return (
+      <section
+        id={id}
+        aria-label={label}
+        className={cx("relative h-full w-full overflow-hidden", className, stickyClassName)}
+      >
+        {children(progress, true)}
+      </section>
+    )
 
   return (
     <section
@@ -87,7 +101,7 @@ export function ProjectMeta({
         ))}
       </ul>
       <div className="label mt-6">
-        <ArrowLink href={`/work/${project.slug}`} className={tone === "light" ? "text-warm" : "text-ink"}>
+        <ArrowLink href={`/projects/${project.slug}`} className={tone === "light" ? "text-warm" : "text-ink"}>
           Read the case study
         </ArrowLink>
       </div>
@@ -155,121 +169,5 @@ export function StageList({
         </li>
       ))}
     </ol>
-  )
-}
-
-export type Shape = { x: number; y: number; w: number; h: number; r?: number }
-
-/**
- * A bridge between two projects: the shapes that ended one scene re-form into
- * the shapes that begin the next.
- */
-export function Bridge({
-  from,
-  to,
-  fromLabel,
-  toLabel,
-  caption,
-  tone = "light",
-  toTone,
-}: {
-  from: Shape[]
-  to: Shape[]
-  fromLabel: string
-  toLabel: string
-  caption: string
-  tone?: "light" | "dark"
-  toTone?: "light" | "dark"
-}) {
-  return (
-    <Scene
-      height="170svh"
-      label={`${fromLabel} to ${toLabel}`}
-      className={tone === "light" ? "bg-ink text-warm" : "bg-paper text-ink"}
-    >
-      {(p, pinned) =>
-        pinned ? (
-          <BridgeStage
-            p={p}
-            from={from}
-            to={to}
-            fromLabel={fromLabel}
-            toLabel={toLabel}
-            caption={caption}
-            tone={tone}
-            toTone={toTone ?? tone}
-          />
-        ) : null
-      }
-    </Scene>
-  )
-}
-
-function BridgeStage({
-  p,
-  from,
-  to,
-  fromLabel,
-  toLabel,
-  caption,
-  tone,
-  toTone,
-}: {
-  p: MotionValue<number>
-  from: Shape[]
-  to: Shape[]
-  fromLabel: string
-  toLabel: string
-  caption: string
-  tone: "light" | "dark"
-  toTone: "light" | "dark"
-}) {
-  const m = useTransform(p, [0.15, 0.8], [0, 1], {
-    ease: (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
-  })
-  const bg = useTransform(p, [0.7, 1], tone === toTone ? [0, 0] : [0, 1])
-  const fromOpacity = useTransform(p, [0.1, 0.35], [1, 0.25])
-  const toOpacity = useTransform(p, [0.55, 0.8], [0.25, 1])
-  const line = useTransform(p, [0, 1], [0, 1])
-  const target = toTone === "light" ? "var(--color-ink)" : "var(--color-paper)"
-  const ink = (t: "light" | "dark") => (t === "light" ? "#f6f4ee" : "#0a0a09")
-  const color = useTransform(bg, [0, 1], [ink(tone), ink(toTone)])
-  return (
-    <>
-      <motion.div aria-hidden className="absolute inset-0" style={{ opacity: bg, backgroundColor: target }} />
-      <motion.div aria-hidden className="absolute inset-0" style={{ color }}>
-        <div className="gutter absolute inset-x-0 top-24 flex items-center justify-between">
-          <motion.span className="label" style={{ opacity: fromOpacity }}>
-            {fromLabel}
-          </motion.span>
-          <span className="label opacity-50">{caption}</span>
-          <motion.span className="label" style={{ opacity: toOpacity }}>
-            {toLabel}
-          </motion.span>
-        </div>
-        <div className="absolute inset-x-[8vw] top-[22%] bottom-[18%] lg:inset-x-[16vw]">
-          {from.map((f, i) => (
-            <MorphRect key={i} from={f} to={to[i] ?? f} m={m} accent={i === 0} />
-          ))}
-        </div>
-        <div className="gutter absolute inset-x-0 bottom-12">
-          <motion.div className="h-px origin-left bg-current opacity-30" style={{ scaleX: line }} />
-        </div>
-      </motion.div>
-    </>
-  )
-}
-
-function MorphRect({ from, to, m, accent }: { from: Shape; to: Shape; m: MotionValue<number>; accent: boolean }) {
-  const left = useTransform(m, (v) => `${from.x + (to.x - from.x) * v}%`)
-  const top = useTransform(m, (v) => `${from.y + (to.y - from.y) * v}%`)
-  const width = useTransform(m, (v) => `${from.w + (to.w - from.w) * v}%`)
-  const height = useTransform(m, (v) => `${from.h + (to.h - from.h) * v}%`)
-  const radius = useTransform(m, (v) => `${(from.r ?? 0) + ((to.r ?? 0) - (from.r ?? 0)) * v}px`)
-  return (
-    <motion.span
-      className={cx("absolute border", accent ? "border-accent bg-accent/20" : "border-current/40 bg-current/[0.04]")}
-      style={{ left, top, width, height, borderRadius: radius }}
-    />
   )
 }

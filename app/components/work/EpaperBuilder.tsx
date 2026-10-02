@@ -5,9 +5,9 @@ import { ProjectMeta, ProjectTitle, Scene, StageList, useStage } from "./shared"
 import { EPAPER_STAGES, EpaperPage } from "./visuals/EpaperPage"
 
 /** 02 — NEWSPAPER → PAGE → BLOCKS → EDITOR, one stage per stretch of scroll. */
-export function EpaperBuilder({ project }: { project: Project }) {
+export function EpaperBuilder({ project, progress }: { project: Project; progress?: MotionValue<number> }) {
   return (
-    <Scene height="360svh" className="bg-paper text-ink" label={project.title}>
+    <Scene progress={progress} height="360svh" className="bg-paper text-ink" label={project.title}>
       {(p) => <Stage p={p} project={project} />}
     </Scene>
   )

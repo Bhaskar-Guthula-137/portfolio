@@ -2,10 +2,10 @@ import { Link } from "react-router"
 
 import { SplitText } from "~/components/ui/SplitText"
 import { SystemLine } from "~/components/ui/SystemLine"
-import { siteConfig } from "~/data/site-config"
+import { infoData } from "~/data/info"
 
 export function meta() {
-  return [{ title: `Not found — ${siteConfig.name}` }, { name: "robots", content: "noindex" }]
+  return [{ title: `Not found — ${infoData.name}` }, { name: "robots", content: "noindex" }]
 }
 
 export default function NotFound() {

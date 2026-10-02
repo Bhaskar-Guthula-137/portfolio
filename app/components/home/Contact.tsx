@@ -4,8 +4,8 @@ import { useRef } from "react"
 import { ArrowLink } from "~/components/ui/ArrowLink"
 import { Magnetic } from "~/components/ui/Magnetic"
 import { SplitText } from "~/components/ui/SplitText"
-import { siteConfig } from "~/data/site-config"
 import { useSectionProgress } from "~/lib/motion"
+import { infoData } from "~/data/info"
 
 /** SHIP — the closing statement. */
 export function Contact() {
@@ -20,7 +20,7 @@ export function Contact() {
       aria-labelledby="contact-title"
       className="gutter relative overflow-hidden bg-ink pt-28 pb-20 text-warm lg:pt-40"
     >
-      <span className="label text-warm/50">09 / Ship</span>
+      <span className="label text-warm/50">07 / Ship</span>
       <motion.h2
         id="contact-title"
         className="display mt-10 origin-left text-[15vw] lg:text-[11.5vw]"
@@ -41,7 +41,7 @@ export function Contact() {
         <div className="flex flex-col items-start gap-8 lg:items-end">
           <Magnetic strength={0.2}>
             <a
-              href={`mailto:${siteConfig.email}`}
+              href={`mailto:${infoData.email}`}
               className="group relative inline-flex items-center gap-5 overflow-hidden rounded-full border border-warm/30 py-5 pr-6 pl-8 text-3xl font-semibold tracking-tight lg:text-5xl"
             >
               <span className="absolute inset-0 origin-bottom scale-y-0 bg-accent transition-transform duration-500 ease-[var(--ease-expo)] group-hover:scale-y-100" />
@@ -51,11 +51,11 @@ export function Contact() {
               </span>
             </a>
           </Magnetic>
-          <p className="font-mono text-sm text-warm/50">{siteConfig.email}</p>
+          <p className="font-mono text-sm text-warm/50">{infoData.email}</p>
           <div className="label flex flex-wrap gap-8">
-            <ArrowLink href={siteConfig.links.github}>View GitHub</ArrowLink>
-            <ArrowLink href={siteConfig.links.linkedin}>LinkedIn</ArrowLink>
-            <ArrowLink href={siteConfig.links.blog}>Blog</ArrowLink>
+            <ArrowLink href={infoData.socials.github}>View GitHub</ArrowLink>
+            <ArrowLink href={infoData.socials.linkedin}>LinkedIn</ArrowLink>
+            <ArrowLink href={infoData.socials.blog}>Blog</ArrowLink>
           </div>
         </div>
       </div>

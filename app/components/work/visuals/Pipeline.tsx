@@ -28,7 +28,7 @@ const INFRA = [
 ]
 
 /**
- * Rush Cut's pipeline. Each level adds structure: first the stages, then the
+ * The video editing agent's pipeline. Each level adds structure: first the stages, then the
  * queue and workers that run them. A packet travels the main line.
  */
 export function Pipeline({ level, vertical }: { level: number; vertical: boolean }) {
@@ -58,7 +58,7 @@ export function Pipeline({ level, vertical }: { level: number; vertical: boolean
       viewBox={box}
       className="h-full w-full"
       role="img"
-      aria-label="Rush Cut pipeline: video, transcription, AI plan, edit, FFmpeg, output, run by a queue and background workers."
+      aria-label="Video editing agent pipeline: video, transcription, AI plan, edit, FFmpeg, output, run by a queue and background workers."
     >
       {/* Main line */}
       <motion.line

@@ -12,11 +12,26 @@ const LABELS: Partial<Record<Mode, string>> = { link: "Open ↗", view: "View �
  * `data-cursor="view" | "inspect"`; other links and buttons show "Open ↗".
  * Fine-pointer devices only, and off entirely with reduced motion.
  */
+/** True when the page under (x, y) is light, so the dot should turn dark. */
+function isLightAt(x: number, y: number) {
+  let el = document.elementFromPoint(x, y)
+  while (el) {
+    const m = getComputedStyle(el).backgroundColor.match(/[\d.]+/g)
+    if (m && (m[3] === undefined || Number(m[3]) > 0.5)) {
+      const [r, g, b] = m.map(Number)
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b > 140
+    }
+    el = el.parentElement
+  }
+  return false
+}
+
 export function CustomCursor() {
   const reduced = !useMotionAllowed()
   const [enabled, setEnabled] = useState(false)
   const [visible, setVisible] = useState(false)
   const [mode, setMode] = useState<Mode>("default")
+  const [onLight, setOnLight] = useState(false)
   const x = useMotionValue(-100)
   const y = useMotionValue(-100)
   const sx = useSpring(x, { stiffness: 700, damping: 50, mass: 0.35 })
@@ -34,10 +49,21 @@ export function CustomCursor() {
     if (!enabled) return
     document.documentElement.classList.add("has-cursor")
 
+    // Check the background under the pointer at most once per frame — on
+    // pointer moves and on scroll, since scrolling changes what is underneath.
+    let frame = 0
+    const sample = () => {
+      if (frame) return
+      frame = requestAnimationFrame(() => {
+        frame = 0
+        setOnLight(isLightAt(x.get(), y.get()))
+      })
+    }
     const move = (e: PointerEvent) => {
       x.set(e.clientX)
       y.set(e.clientY)
       setVisible(true)
+      sample()
     }
     const over = (e: PointerEvent) => {
       const target = e.target as Element | null
@@ -50,11 +76,14 @@ export function CustomCursor() {
 
     window.addEventListener("pointermove", move, { passive: true })
     window.addEventListener("pointerover", over, { passive: true })
+    window.addEventListener("scroll", sample, { passive: true })
     document.documentElement.addEventListener("pointerleave", leave)
     return () => {
       document.documentElement.classList.remove("has-cursor")
       window.removeEventListener("pointermove", move)
       window.removeEventListener("pointerover", over)
+      window.removeEventListener("scroll", sample)
+      cancelAnimationFrame(frame)
       document.documentElement.removeEventListener("pointerleave", leave)
     }
   }, [enabled, x, y])
@@ -83,7 +112,7 @@ export function CustomCursor() {
         ) : (
           <motion.span
             key="dot"
-            className="absolute top-0 left-0 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-warm mix-blend-difference"
+            className={`absolute top-0 left-0 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-200 ${onLight ? "bg-ink" : "bg-warm"}`}
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}

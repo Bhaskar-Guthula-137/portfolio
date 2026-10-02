@@ -1,4 +1,5 @@
 import { siteConfig } from "~/data/site-config"
+import { infoData } from "~/data/info"
 
 type MetaInput = {
   title: string
@@ -14,7 +15,7 @@ export function buildMeta({ title, description, path, type = "website" }: MetaIn
     { name: "description", content: description },
     { tagName: "link", rel: "canonical", href: url },
     { property: "og:type", content: type },
-    { property: "og:site_name", content: siteConfig.name },
+    { property: "og:site_name", content: infoData.name },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
     { property: "og:url", content: url },
@@ -28,15 +29,15 @@ export function personJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "Person",
-    name: siteConfig.name,
-    jobTitle: siteConfig.title,
+    name: infoData.name,
+    jobTitle: infoData.role,
     description: siteConfig.seo.description,
     url: siteConfig.url,
-    email: `mailto:${siteConfig.email}`,
+    email: `mailto:${infoData.email}`,
     address: {
       "@type": "PostalAddress",
-      addressLocality: siteConfig.location.city,
-      addressCountry: siteConfig.location.country,
+      addressLocality: infoData.location.city,
+      addressCountry: infoData.location.country,
     },
     knowsAbout: [
       "React",
@@ -49,6 +50,6 @@ export function personJsonLd() {
       "RAG",
       "Real-time systems",
     ],
-    sameAs: [siteConfig.links.github, siteConfig.links.linkedin, siteConfig.links.blog],
+    sameAs: [infoData.socials.github, infoData.socials.linkedin, infoData.socials.blog],
   }
 }

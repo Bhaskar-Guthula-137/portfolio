@@ -9,9 +9,10 @@ import {
 } from "framer-motion"
 import { useEffect, useRef, useState } from "react"
 
-import { siteConfig } from "~/data/site-config"
+import { SocialIcons } from "~/components/ui/SocialIcons"
 import { EASE, useMedia, useMotionAllowed } from "~/lib/motion"
 import { Butterfly, FallingLeaf, NatureDefs, Plant } from "./Nature"
+import { infoData } from "~/data/info"
 
 // Scene space: a W × 220 capsule, floor at y = 200. Phones get a narrower
 // capsule so the figure stays a readable size.
@@ -590,22 +591,23 @@ function OrderBook({ tick }: { tick: number }) {
   )
 }
 
-/** Two or three tiny annotations around the scene. */
+/** Beneath the scene: social links, a small motto, and the local time. */
 export function SceneNotes({ delay }: { delay: number }) {
   const time = useTime()
   return (
     <motion.div
-      aria-hidden
-      className="label pointer-events-none absolute inset-x-[8%] -bottom-7 flex justify-between text-[0.6rem] text-warm/35"
+      className="label absolute inset-x-[8%] -bottom-10 flex items-center justify-between text-[0.6rem] text-warm/35"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8, delay }}
     >
-      <span className="flex items-center gap-2">
-        <span className="size-1 rounded-full bg-accent" /> Markets open
+      <SocialIcons iconClassName="size-3" className="gap-2" />
+      <span aria-hidden className="hidden sm:inline">
+        Build · Ship · Repeat
       </span>
-      <span className="hidden sm:inline">Build · Ship · Repeat</span>
-      <span className="tabular-nums">{time ? `${time} IST` : " "}</span>
+      <span aria-hidden className="tabular-nums">
+        {time ? `${time} IST` : "\u00a0"}
+      </span>
     </motion.div>
   )
 }
@@ -617,7 +619,7 @@ function useTime() {
       new Date().toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
-        timeZone: siteConfig.location.timeZone,
+        timeZone: infoData.location.timeZone,
       })
     setTime(fmt())
     const id = window.setInterval(() => setTime(fmt()), 30_000)

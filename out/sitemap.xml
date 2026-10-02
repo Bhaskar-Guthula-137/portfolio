@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://bhaskarguthula.dev/</loc></url>
-  <url><loc>https://bhaskarguthula.dev/work/live-cricket</loc></url>
-  <url><loc>https://bhaskarguthula.dev/work/epaper-builder</loc></url>
-  <url><loc>https://bhaskarguthula.dev/work/shortnews-cms</loc></url>
-  <url><loc>https://bhaskarguthula.dev/work/rush-cut</loc></url>
-  <url><loc>https://bhaskarguthula.dev/work/ai-content-assistant</loc></url>
-  <url><loc>https://bhaskarguthula.dev/work/cloud-systems</loc></url>
-  <url><loc>https://bhaskarguthula.dev/writing/claude-skills-every-developer-should-know</loc></url>
-  <url><loc>https://bhaskarguthula.dev/writing/ai-agent-architecture</loc></url>
-  <url><loc>https://bhaskarguthula.dev/writing/rag-is-more-than-vector-search</loc></url>
-  <url><loc>https://bhaskarguthula.dev/writing/real-time-apps-with-durable-objects</loc></url>
+  <url><loc>https://bhaskarguthula.dev/projects/live-cricket</loc></url>
+  <url><loc>https://bhaskarguthula.dev/projects/epaper-builder</loc></url>
+  <url><loc>https://bhaskarguthula.dev/projects/shortnews-cms</loc></url>
+  <url><loc>https://bhaskarguthula.dev/projects/video-editing-agent</loc></url>
+  <url><loc>https://bhaskarguthula.dev/projects/ai-content-assistant</loc></url>
+  <url><loc>https://bhaskarguthula.dev/projects/cloud-systems</loc></url>
+  <url><loc>https://bhaskarguthula.dev/blogs/claude-skills-every-developer-should-know</loc></url>
+  <url><loc>https://bhaskarguthula.dev/blogs/ai-agent-architecture</loc></url>
+  <url><loc>https://bhaskarguthula.dev/blogs/rag-is-more-than-vector-search</loc></url>
+  <url><loc>https://bhaskarguthula.dev/blogs/real-time-apps-with-durable-objects</loc></url>
 </urlset>

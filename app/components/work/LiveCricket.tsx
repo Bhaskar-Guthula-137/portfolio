@@ -17,7 +17,7 @@ function useViewport() {
 }
 
 /** 01 — the scoreboard floats beside the title, then expands into a full-screen product view. */
-export function LiveCricket({ project }: { project: Project }) {
+export function LiveCricket({ project, progress }: { project: Project; progress?: MotionValue<number> }) {
   const vp = useViewport()
   const desktop = vp.w >= 1024
   const small = desktop
@@ -25,7 +25,13 @@ export function LiveCricket({ project }: { project: Project }) {
     : { w: vp.w * 0.9, h: 240, x: vp.w * 0.05, y: vp.h - 240 - 32 }
 
   return (
-    <Scene height="340svh" className="bg-ink text-warm" label={project.title} staticClassName="relative">
+    <Scene
+      progress={progress}
+      height="340svh"
+      className="bg-ink text-warm"
+      label={project.title}
+      staticClassName="relative"
+    >
       {(p, pinned) => <Stage p={p} pinned={pinned} project={project} vp={vp} small={small} desktop={desktop} />}
     </Scene>
   )

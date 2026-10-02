@@ -2,7 +2,8 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-
 import { useEffect, useRef, useState } from "react"
 import { Link, useLocation } from "react-router"
 
-import { navLinks, siteConfig, socialLinks } from "~/data/site-config"
+import { navLinks, siteConfig } from "~/data/site-config"
+import { infoData, socialLinks } from "~/data/info"
 import { LOGO_FONT_PX, navLogoOpacity } from "~/lib/brand"
 import { BOOT, cx, EASE, EASE_IN_OUT } from "~/lib/motion"
 
@@ -75,14 +76,14 @@ export function Navigation() {
         <NavGroup side="left" active={active} />
 
         {/* The hero's name, small: the logo */}
-        <Link to="/" aria-label={`${siteConfig.name} — home`} className="relative z-10 col-start-2 justify-self-center">
+        <Link to="/" aria-label={`${infoData.name} — home`} className="relative z-10 col-start-2 justify-self-center">
           <motion.span
             aria-hidden
             className="display block text-center leading-[0.84] text-warm"
             style={{ fontSize: LOGO_FONT_PX, opacity: navLogoOpacity }}
           >
-            <span className="block lg:-translate-x-[0.45em]">{siteConfig.firstName}</span>
-            <span className="block lg:translate-x-[0.45em]">{siteConfig.lastName}</span>
+            <span className="block lg:-translate-x-[0.45em]">{infoData.firstName}</span>
+            <span className="block lg:translate-x-[0.45em]">{infoData.lastName}</span>
           </motion.span>
         </Link>
 

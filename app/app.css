@@ -20,6 +20,7 @@
   --animate-flow: flow 1.2s linear infinite;
   --animate-pulse-dot: pulse-dot 2.4s ease-out infinite;
   --animate-marquee: marquee 40s linear infinite;
+  --animate-stamp: stamp-spin 22s linear infinite;
 
   @keyframes flow {
     to {
@@ -33,6 +34,11 @@
     70%,
     100% {
       box-shadow: 0 0 0 8px rgb(200 242 61 / 0);
+    }
+  }
+  @keyframes stamp-spin {
+    to {
+      transform: rotate(360deg);
     }
   }
   @keyframes marquee {

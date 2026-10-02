@@ -30,8 +30,8 @@ export function CaseStudy({ project, next }: { project: Project; next: Project }
       {/* Opening */}
       <header className="gutter relative pt-28 pb-14 lg:pt-36">
         <div className="label flex items-center justify-between text-warm/60">
-          <ArrowLink href="/#work" arrow="←" className="flex-row-reverse">
-            All work
+          <ArrowLink href="/#projects" arrow="←" className="flex-row-reverse">
+            All projects
           </ArrowLink>
           <span>Case study · {project.index} / 06</span>
         </div>
@@ -202,7 +202,7 @@ export function CaseStudy({ project, next }: { project: Project; next: Project }
 
       {/* Next */}
       <Link
-        to={`/work/${next.slug}`}
+        to={`/projects/${next.slug}`}
         data-cursor="view"
         className="group gutter block border-t border-warm/10 bg-char py-20 lg:py-28"
       >

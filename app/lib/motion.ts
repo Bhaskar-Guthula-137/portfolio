@@ -5,7 +5,17 @@ export const EASE = [0.16, 1, 0.3, 1] as const
 export const EASE_IN_OUT = [0.76, 0, 0.24, 1] as const
 
 /** Seconds into the first-load boot sequence at which each beat happens. */
-export const BOOT = { line: 0.05, first: 0.3, last: 0.45, role: 0.8, frame: 0.95, statement: 1.25, actions: 1.35, meta: 1.4, nav: 1.45 }
+export const BOOT = {
+  line: 0.05,
+  first: 0.3,
+  last: 0.45,
+  role: 0.8,
+  frame: 0.95,
+  statement: 1.25,
+  actions: 1.35,
+  meta: 1.4,
+  nav: 1.45,
+}
 
 export function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ")
